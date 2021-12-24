@@ -16,9 +16,9 @@ confirm() {
 dot_dir=$HOME'/.dogf'
 if [ -d $dot_dir ] 
 then
-    echo "[ dogf ] there is already an exisiting installation, do you want to do"`
+    echo "[🐶dogf] there is already an existing installation, do you want to do"`
          `" a refresh install?"
-    echo "this will erease the exisiting installation"
+    echo "this will erase the existing installation"
     confirm
 fi
 rm -rf $dot_dir
