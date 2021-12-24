@@ -1,0 +1,31 @@
+confirm() {
+    # call with a prompt string or use a default
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY])
+            return
+            ;;
+        *)
+            exit 0 
+            ;;
+    esac
+}
+
+
+
+dot_dir=$HOME'/.dogf'
+if [ -d $dot_dir ] 
+then
+    echo "[ dogf ] there is already an exisiting installation, do you want to do"`
+         `" a refresh install?"
+    echo "this will erease the exisiting installation"
+    confirm
+fi
+rm -rf $dot_dir
+echo "[🐶dogf] installing dogf under $dot_dir"
+mkdir $dot_dir
+cd $dot_dir
+echo "[🐶dogf] downloading repo"
+git clone https://github.com/bsantanad/dogf ./
+echo "[🐶dogf] linking dogf to /usr/bin, we are going to need sudo for that"
+sudo ln -sf $(pwd)/dogf /usr/bin/dogf
