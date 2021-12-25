@@ -1,0 +1,52 @@
+.page_headline {
+  margin: auto;
+  width: 70%;
+}
+
+h2 {
+    margin: 20px 0px 5px 0px;
+    padding: 0px;
+    padding-left: 0px;
+}
+
+body {
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+}
+
+
+.article_text {
+  max-width: 75em;
+}
+
+.headline {
+    border-radius: 0.5em;
+    padding-left: 6px;
+    background-color: #8D94BA;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.blog {
+  width: 79.1667%;
+}
+
+@media only screen and (max-width: 480px){
+    h1 {
+      font-size : clamp(2rem, 2vw, 3rem);
+    }
+    p {
+      font-size : clamp(1rem, 1vw, 3rem);
+    }
+    .page_headline {
+      padding: 1em;
+      border-radius: 0.5em;
+      background-color: #eeeeee;
+    }
+    .blog {
+      width: auto;
+    }
+}
