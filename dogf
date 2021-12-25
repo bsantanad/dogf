@@ -1,10 +1,26 @@
 #!/usr/bin/env python3
+'''
+dogf
+'''
 
 import argparse
+import os
+import errno
+import logging
+import shutil
+import getpass
+
+import yaml
 
 import commonl
 
+logging.basicConfig(
+    format='[🐶dogf] %(levelname)s: %(message)s,',
+    level=logging.DEBUG
+)
 
+
+'''
 parser = argparse.ArgumentParser(description='static site builder')
 
 # Add the arguments
@@ -14,6 +30,112 @@ parser.add_argument('test',
                     help='the test')
 
 args = parser.parse_args()
+'''
 
-print(args.test)
- 
+def create(blog_name, directory= './'):
+    '''
+    create a blog directory with a config.yml and a posts dir
+    with an example
+    '''
+    config_path = os.environ.get('HOME', '~/')
+    dogf_path = os.path.join(config_path, '.dogf')
+    if not os.path.exists(dogf_path):
+        logging.error('installation not found, if you cloned the repo please'
+                      ' read: README')
+        return
+
+    # create parent dir
+    base_path = os.path.join(directory, blog_name)
+    try:
+        os.mkdir(base_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+        print(f'[🐶dogf] {base_path} already exists, please remove directory'
+              ' if you want to create a new one')
+        return
+
+    # crate posts directory
+    posts_path = os.path.join(base_path, 'posts')
+    try:
+        os.mkdir(posts_path)
+    except OSError as e:
+        raise e
+
+    # cp example post to posts directory
+    post_path = os.path.join(dogf_path, 'templates/post_example.md')
+    post_ex_path = os.path.join(posts_path, 'example.md')
+    try:
+        shutil.copy(post_path, post_ex_path)
+    except IOError as e:
+        logging.error('unable to copy example post, please check your'
+                      ' installation')
+        raise e
+
+    # get the config template change author and name and store it in
+    # working directory
+    config_path = os.path.join(dogf_path, 'templates/config.yml')
+    with open(config_path, 'r') as file:
+        try:
+            config = yaml.safe_load(file)
+        except yaml.YAMLError as e:
+            logging.error('unable to read the config template file') 
+            raise e
+
+    config['blog_name'] = blog_name
+    config['author'] = getpass.getuser()
+    config_ex_path = os.path.join(base_path, 'config.yml')
+    with open(config_ex_path, 'w') as file:
+        yaml.dump(config, file)
+
+    print(f'[🐶dogf] {blog_name} succesfully created')
+
+def build():
+    blog_path = './hello_world' #FIXME this should be current dir
+    posts_path = os.path.join(blog_path, 'posts')
+    site_path = os.path.join(blog_path, 'site')
+
+    # get config path
+    config_path = os.environ.get('HOME', '~/')
+    dogf_path = os.path.join(config_path, '.dogf')
+    if not os.path.exists(dogf_path):
+        logging.error('installation not found, if you cloned the repo please'
+                      ' read: README')
+        return
+
+    # create/replace site directory
+    if os.path.exists(site_path):
+        shutil.rmtree(site_path)
+    try:
+        os.mkdir(site_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+    style_path = os.path.join(site_path, 'sytle')
+    try:
+        os.mkdir(style_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+    htmls_path = os.path.join(site_path, 'posts')
+    try:
+        os.mkdir(htmls_path)
+    except OSError as e:
+        if e.errno != errno.EEXIST:
+            raise
+
+    # get css from templates 
+    config_css = os.path.join(dogf_path, 'templates/main.css')
+    css_path = os.path.join(style_path, 'main.css')
+    try:
+        shutil.copy(config_css, css_path)
+    except IOError as e:
+        logging.error('unable to copy style for the blog, please check your'
+                      ' installation')
+        raise e
+
+
+create('hello_world')
+build()
