@@ -1,3 +1,4 @@
+#!/bin/bash
 confirm() {
     # call with a prompt string or use a default
     read -r -p "${1:-Are you sure? [y/N]} " response
@@ -29,3 +30,5 @@ echo "[🐶dogf] downloading repo"
 git clone https://github.com/bsantanad/dogf ./
 echo "[🐶dogf] linking dogf to /usr/bin, we are going to need sudo for that"
 sudo ln -sf $(pwd)/dogf /usr/bin/dogf
+
+# FIXME create virtualenv
