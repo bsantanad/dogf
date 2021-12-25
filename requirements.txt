@@ -1,3 +1,6 @@
 importlib-metadata==4.10.0
+Jinja2==3.0.3
 Markdown==3.3.6
+MarkupSafe==2.0.1
+PyYAML==6.0
 zipp==3.6.0
