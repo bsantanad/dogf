@@ -9,13 +9,15 @@ import errno
 import logging
 import shutil
 import getpass
+import datetime
 
 import yaml
+import jinja2
 
 import commonl
 
 logging.basicConfig(
-    format='[🐶dogf] %(levelname)s: %(message)s,',
+    format='[🐶dogf] %(levelname)s: %(message)s',
     level=logging.DEBUG
 )
 
@@ -79,7 +81,7 @@ def create(blog_name, directory= './'):
         try:
             config = yaml.safe_load(file)
         except yaml.YAMLError as e:
-            logging.error('unable to read the config template file') 
+            logging.error('unable to read the config template file')
             raise e
 
     config['blog_name'] = blog_name
@@ -92,10 +94,26 @@ def create(blog_name, directory= './'):
 
 def build():
     blog_path = './hello_world' #FIXME this should be current dir
+
+    # get config file
+    config_file_path = os.path.join(blog_path, 'config.yml')
+    try:
+        with open(config_file_path, 'r') as file:
+            try:
+                config = yaml.safe_load(file)
+            except yaml.YAMLError as e:
+                logging.error('config.yml file corrupted please check the'
+                              ' format')
+                raise e
+    except IOError as e:
+        logging.error(f'unable to find config.yml file in {blog_path}. Are you'
+                      ' in a in the head of a dogf directory?')
+        return
+
     posts_path = os.path.join(blog_path, 'posts')
     site_path = os.path.join(blog_path, 'site')
 
-    # get config path
+    # get .dogf path
     config_path = os.environ.get('HOME', '~/')
     dogf_path = os.path.join(config_path, '.dogf')
     if not os.path.exists(dogf_path):
@@ -112,7 +130,7 @@ def build():
         if e.errno != errno.EEXIST:
             raise
 
-    style_path = os.path.join(site_path, 'sytle')
+    style_path = os.path.join(site_path, 'style')
     try:
         os.mkdir(style_path)
     except OSError as e:
@@ -124,9 +142,9 @@ def build():
         os.mkdir(htmls_path)
     except OSError as e:
         if e.errno != errno.EEXIST:
-            raise
+            raise e
 
-    # get css from templates 
+    # get css from templates
     config_css = os.path.join(dogf_path, 'templates/main.css')
     css_path = os.path.join(style_path, 'main.css')
     try:
@@ -134,6 +152,104 @@ def build():
     except IOError as e:
         logging.error('unable to copy style for the blog, please check your'
                       ' installation')
+        raise e
+
+    # get config file
+    config_file_path = os.path.join(blog_path, 'config.yml')
+    try:
+        with open(config_file_path, 'r') as file:
+            try:
+                config = yaml.safe_load(file)
+            except yaml.YAMLError as e:
+                logging.error('config.yml file corrupted please check the'
+                              ' format')
+                raise e
+    except IOError as e:
+        logging.error(f'unable to find config file in {blog_path}. Are you in'
+                      ' a in the head of a dogf directory?')
+        raise e
+
+    # config is the dict with the yaml config
+    try:
+        posts = commonl.get_posts_names(posts_path)
+    except IOError as e:
+        logging.error(f'unable to find posts directory in {blog_path}.'
+                      ' the one with the markdown files'
+                      ' Are you in in the head of a dogf directory?')
+        raise e
+
+    # convert each post to html file and save it under site/posts
+    # each obj_post is a dict, that has the following keys
+    # title - mandatory
+    # topic
+    # date
+    # html - mandatory
+    obj_posts = []
+    for post in posts:
+        obj_post = commonl.md_to_html(post)
+        if 'title' not in obj_post.keys():
+            logging.error(f'unable to find title in {post}. Skipping post')
+            continue
+        obj_posts.append(obj_post)
+        filename = obj_post['title'].replace(' ', '-') + '.html'
+        site_post_path = os.path.join(htmls_path, filename)
+        try:
+            with open(site_post_path, 'w') as file:
+                file.write(obj_post['html'])
+        except IOError as e:
+            logging.error(f'unable write in {site_post_path}')
+            raise e
+
+    # FIXME sort by date obj_posts, it can be done but i am too lazy now
+
+    ## build_index
+    # copy template index to site directoy
+    index_config_path = os.path.join(dogf_path, 'templates/index.html')
+    index_path = os.path.join(site_path, 'index.html')
+    print(index_config_path)
+    print(index_path)
+    try:
+        shutil.copy(index_config_path, index_path)
+    except IOError as e:
+        logging.error('unable to copy example index to your site, please check'
+                      ' your installation')
+        raise e
+
+    # build obj to send to jinja for index template
+    today = datetime.date.today()
+    date = today.strftime("%b %d, %Y")
+    obj = {
+        'blog_name': config['blog_name'],
+        'welcome_message': config['welcome_message'],
+        'date': date,
+        'articles': [],
+    }
+    for obj_post in obj_posts:
+        tmp = {
+            'title': obj_post['title'],
+            'topic': obj_post['topic'],
+            'date': obj_post['date'],
+            'filename': obj_post['title'].replace(' ', '-'),
+        }
+        obj['articles'].append(tmp)
+
+    # FIXME no need to r and then write it can be done by opening once the file
+    # please check
+    try:
+        with open(index_path, 'r') as file:
+            tmp = file.read()
+            # FIXME add try catch
+            template = jinja2.Template(tmp)
+            html = template.render(obj)
+    except IOError as e:
+        logging.error(f'unable write in {site_post_path}')
+        raise e
+
+    try:
+        with open(index_path, 'w') as file:
+            file.write(html)
+    except IOError as e:
+        logging.error(f'unable write in {site_post_path}')
         raise e
 
 
