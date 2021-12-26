@@ -1,3 +1,8 @@
+---
+title: Lorem ipsum
+date: Dec 26, 2021 14:30 UTC
+topic: example
+---
 # Ut inguine fiat signatur nisi relicta antri
 
 ## Theron similem et omnis melioris

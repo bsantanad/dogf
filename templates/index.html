@@ -1,0 +1,32 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <title> {{ blog_name }}</title>
+  <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+  <div class='blog'>
+  <div class='page_headline'>
+  <div class='text_headline'>
+  <h1> {{ welcome_message }} </h1>
+  <h2> last updated in: {{ date }} </h1>
+  </div>
+  </div>
+
+  {% for article in articles %}
+    <div class='article_text'>
+    <h2 class='headline'> {{ article.title }}</h2>
+    <font size="-1">
+        [ {{article.topic}} ] Posted {{article.date}}
+    </font>
+    <p>
+        {{ article.p }}
+    </p>
+    <p> (<a href='./posts/{{ article.filename }}.html'>full post</a>)</p>
+
+  {% endfor %}
+  </div>
+  </div>
+
+</body>
+</html>
