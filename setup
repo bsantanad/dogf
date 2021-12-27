@@ -28,6 +28,8 @@ mkdir $dot_dir
 cd $dot_dir
 echo "[🐶dogf] downloading repo"
 git clone https://github.com/bsantanad/dogf ./
+echo "[🐶dogf] installing dependecies with pip, dont worry they arent that many"
+pip install --user -r requirements.txt
 echo "[🐶dogf] linking dogf to /usr/bin, we are going to need sudo for that"
 sudo ln -sf $(pwd)/dogf /usr/bin/dogf
 
