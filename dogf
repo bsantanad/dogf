@@ -17,22 +17,8 @@ import jinja2
 import commonl
 
 logging.basicConfig(
-    format='[🐶dogf] %(levelname)s: %(message)s',
-    level=logging.DEBUG
+    format='[🐶dogf] %(levelname)s: %(message)s'
 )
-
-
-'''
-parser = argparse.ArgumentParser(description='static site builder')
-
-# Add the arguments
-parser.add_argument('test',
-                    metavar='test',
-                    type=str,
-                    help='the test')
-
-args = parser.parse_args()
-'''
 
 def create(blog_name, directory= './'):
     '''
@@ -92,9 +78,7 @@ def create(blog_name, directory= './'):
 
     print(f'[🐶dogf] {blog_name} succesfully created')
 
-def build():
-    blog_path = './hello_world' #FIXME this should be current dir
-
+def build_site(blog_path):
     # get config file
     config_file_path = os.path.join(blog_path, 'config.yml')
     try:
@@ -206,8 +190,6 @@ def build():
     # copy template index to site directoy
     index_config_path = os.path.join(dogf_path, 'templates/index.html')
     index_path = os.path.join(site_path, 'index.html')
-    print(index_config_path)
-    print(index_path)
     try:
         shutil.copy(index_config_path, index_path)
     except IOError as e:
@@ -252,6 +234,43 @@ def build():
         logging.error(f'unable write in {site_post_path}')
         raise e
 
+def new(args):
+    create(args.name, args.path)
 
-create('hello_world')
-build()
+def build(args):
+    build_site(args.path)
+
+def main():
+    arg_parser = argparse.ArgumentParser()
+    arg_subparsers = arg_parser.add_subparsers(help = 'commands')
+
+    new_parser = arg_subparsers.add_parser(
+        'new', help = 'create new blog')
+    new_parser.set_defaults(func=new)
+    new_parser.add_argument(
+        'name', help = 'name of the new blog')
+    new_parser.add_argument(
+        '-p', '--path',  help = 'path where you want to create the blog',
+        default = './'
+    )
+
+    build_parser = arg_subparsers.add_parser(
+        'build',
+        help = 'build blog, this means creating the site directory with the'
+               ' htmls and so on'
+    )
+    build_parser.set_defaults(func=build)
+    build_parser.add_argument(
+        '-p', '--path',  help = 'path where you want to create the blog',
+        default = './'
+    )
+
+    args = arg_parser.parse_args()
+    try:
+        func = args.func
+    except AttributeError:
+        arg_parser.error("too few arguments")
+    func(args)
+
+if __name__ == '__main__':
+    main()
