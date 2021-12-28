@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&family=Source+Sans+Pro&display=swap');
+body {
+    zoom: 1;
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    text-rendering: auto;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+/* For all <code> */
+code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: inherit;
+}
+
+/* Code in text */
+p > code,
+li > code,
+dd > code,
+td > code {
+  background: #ffeff0;
+  word-wrap: break-word;
+  box-decoration-break: clone;
+  padding: .1rem .3rem .2rem;
+  border-radius: .4rem;
+}
+
+pre code {
+  display: block;
+  border-radius: .4rem;
+  background: #ffeff0;
+  white-space: pre;
+  max-width: 100%;
+  min-width: 100px;
+  padding: 0.2em;
+}
+
+.main_body{
+  margin: auto;
+  width: 70%;
+}
+
+.main_title{
+  margin: auto;
+  text-align: center;
+  padding: 1em;
+  border-radius: 0.5em;
+  background-color: #eeeeee;
+}
+
+@media only screen and (max-width: 480px){
+    pre code {
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+    }
+}

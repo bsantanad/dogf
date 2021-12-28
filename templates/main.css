@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&family=Source+Sans+Pro&display=swap');
 .page_headline {
   margin: auto;
   width: 70%;
@@ -15,6 +16,10 @@ body {
     word-spacing: normal;
     vertical-align: top;
     text-rendering: auto;
+    font-family: 'Source Sans Pro', sans-serif;
+    margin: auto;
+    width: 80%;
+    font-size: 1.2em;
 }
 
 
@@ -36,15 +41,16 @@ body {
 
 @media only screen and (max-width: 480px){
     h1 {
-      font-size : clamp(2rem, 2vw, 3rem);
+      font-size : clamp(2.2rem, 2vw, 3rem);
     }
     p {
-      font-size : clamp(1rem, 1vw, 3rem);
+      font-size : clamp(1.2rem, 1vw, 3rem);
     }
     .page_headline {
       padding: 1em;
       border-radius: 0.5em;
       background-color: #eeeeee;
+      margin: 1em;
     }
     .blog {
       width: auto;
