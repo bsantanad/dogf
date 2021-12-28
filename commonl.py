@@ -5,6 +5,7 @@ common library
 
 import os
 import markdown
+import jinja2
 
 def get_posts_names(path):
     '''
@@ -58,3 +59,20 @@ def md_to_html(path):
         raise e
     obj['html'] = html
     return obj
+
+def jinja_this_file(path, obj):
+    try:
+        with open(path, 'r') as file:
+            tmp = file.read()
+            # FIXME add try catch
+            template = jinja2.Template(tmp)
+            html = template.render(obj)
+    except IOError as e:
+        logging.error(f'unable write in {path}')
+        raise e
+    try:
+        with open(path, 'w') as file:
+            file.write(html)
+    except IOError as e:
+        logging.error(f'unable write in {path}')
+        raise e
