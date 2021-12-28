@@ -193,6 +193,7 @@ def build_site(blog_path):
             logging.error('unable to copy example post to your site, please'
                           ' check your installation')
             raise e
+        obj_post['author'] = config['author']
         try:
             commonl.jinja_this_file(site_post_path, obj_post)
         except IOError as e:
