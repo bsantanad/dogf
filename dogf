@@ -12,7 +12,6 @@ import getpass
 import datetime
 
 import yaml
-import jinja2
 
 import commonl
 
@@ -138,6 +137,15 @@ def build_site(blog_path):
                       ' installation')
         raise e
 
+    config_css = os.path.join(dogf_path, 'templates/post.css')
+    css_path = os.path.join(style_path, 'post.css')
+    try:
+        shutil.copy(config_css, css_path)
+    except IOError as e:
+        logging.error('unable to copy style for the blog, please check your'
+                      ' installation')
+        raise e
+
     # get config file
     config_file_path = os.path.join(blog_path, 'config.yml')
     try:
@@ -175,13 +183,19 @@ def build_site(blog_path):
             logging.error(f'unable to find title in {post}. Skipping post')
             continue
         obj_posts.append(obj_post)
+        # create the post html
         filename = obj_post['title'].replace(' ', '-') + '.html'
         site_post_path = os.path.join(htmls_path, filename)
+        post_config_path = os.path.join(dogf_path, 'templates/post.html')
         try:
-            with open(site_post_path, 'w') as file:
-                file.write(obj_post['html'])
+            shutil.copy(post_config_path, site_post_path)
         except IOError as e:
-            logging.error(f'unable write in {site_post_path}')
+            logging.error('unable to copy example post to your site, please'
+                          ' check your installation')
+            raise e
+        try:
+            commonl.jinja_this_file(site_post_path, obj_post)
+        except IOError as e:
             raise e
 
     # FIXME sort by date obj_posts, it can be done but i am too lazy now
@@ -215,23 +229,9 @@ def build_site(blog_path):
         }
         obj['articles'].append(tmp)
 
-    # FIXME no need to r and then write it can be done by opening once the file
-    # please check
     try:
-        with open(index_path, 'r') as file:
-            tmp = file.read()
-            # FIXME add try catch
-            template = jinja2.Template(tmp)
-            html = template.render(obj)
+        commonl.jinja_this_file(index_path, obj)
     except IOError as e:
-        logging.error(f'unable write in {site_post_path}')
-        raise e
-
-    try:
-        with open(index_path, 'w') as file:
-            file.write(html)
-    except IOError as e:
-        logging.error(f'unable write in {site_post_path}')
         raise e
 
 def new(args):
