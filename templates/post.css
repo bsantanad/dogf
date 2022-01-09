@@ -41,6 +41,10 @@ pre code {
   width: 70%;
 }
 
+.main_text{
+  margin: 0;
+}
+
 .main_title{
   margin: auto;
   text-align: center;
