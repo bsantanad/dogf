@@ -217,6 +217,7 @@ def build_site(blog_path):
     date = today.strftime("%b %d, %Y")
     obj = {
         'blog_name': config['blog_name'],
+        'author': config['author'],
         'welcome_message': config['welcome_message'],
         'date': date,
         'articles': [],
