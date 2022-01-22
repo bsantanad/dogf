@@ -28,8 +28,22 @@ mkdir $dot_dir
 cd $dot_dir
 echo "[🐶dogf] downloading repo"
 git clone https://github.com/bsantanad/dogf ./
+
 echo "[🐶dogf] installing dependecies with pip, dont worry they arent that many"
-pip install --user -r requirements.txt
+if command -v pip &> /dev/null
+then
+    pip install --user -r requirements.txt
+else
+    echo "[🐶dogf] pip not found in system, trying with pip3"
+    if command -v pip3 &> /dev/null
+    then
+        pip3 install --user -r requirements.txt
+    else
+        echo "[🐶dogf] ERROR: nor pip3 or pip found in system"
+        exit
+    fi
+fi
+
 echo "[🐶dogf] linking dogf to /usr/bin, we are going to need sudo for that"
 sudo ln -sf $(pwd)/dogf /usr/bin/dogf
 
