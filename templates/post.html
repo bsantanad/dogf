@@ -1,24 +1,29 @@
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> {{ title }} </title>
-  <link rel="stylesheet" href="../style/post.css">
+  <title>bsantanad.com</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="../style/main.css">
 </head>
-
 <body>
-  <div class="main_body">
-    <div class="main_title">
-      <h1> {{ title }} </h1>
-      <font size="-1">
-        {{author}}
-      </font>
-    </div>
-
-    <div class="main_text">
+    <header>
+      <nav>
+        <a href="../index.html">
+        🐧 /home/bsantanad
+        </a>
+        <span> $ </span>
+        <a href="../index.html">
+        whoami
+        </a>
+        <span> $ </span>
+        <a href="../index.html">
+        uname
+        </a>
+      </nav>
+    </header>
+    <div>
     {{ html }}
     </div>
-  </div>
 </body>
-
 </html>
