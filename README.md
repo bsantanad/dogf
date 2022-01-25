@@ -65,6 +65,11 @@ python -m http.server
 And it will start serve the site, so you can check it in other devices in your
 local network.
 
+## acknowledgements
+
+The look and feel from the site has heavily inspired on
+[unixsheikh.com](https://unixsheikh.com).
+
 ## why? 
 
 Why making yet another static site generator, and a crappier one than say
