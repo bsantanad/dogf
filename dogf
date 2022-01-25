@@ -194,6 +194,8 @@ def build_site(blog_path):
                           ' check your installation')
             raise e
         obj_post['author'] = config['author']
+        obj_post['main_color'] = config['main_color']
+        obj_post['header_color'] = config['header_color']
         try:
             commonl.jinja_this_file(site_post_path, obj_post)
         except IOError as e:
@@ -219,6 +221,8 @@ def build_site(blog_path):
         'blog_name': config['blog_name'],
         'author': config['author'],
         'welcome_message': config['welcome_message'],
+        'main_color': config['main_color'],
+        'header_color': config['header_color'],
         'date': date,
         'articles': [],
     }
