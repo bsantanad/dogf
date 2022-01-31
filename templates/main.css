@@ -9,7 +9,7 @@ body {
     min-height: 100vh;
     margin: 0 auto;
     max-width: 85%;
-    background-color: white;
+    background-color: var(--posts_bk_color);
 }
 
 header {

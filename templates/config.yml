@@ -3,4 +3,6 @@ blog_name: 'new blog'
 author: 'your name'
 main_color: "#F3F5F9"
 header_color: "#0066FF"
+header_border_color: "#031B4E"
+posts_bk_color: "white"
 welcome_message: 'welcome to my blog'
