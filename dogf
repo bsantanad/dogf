@@ -137,15 +137,6 @@ def build_site(blog_path):
                       ' installation')
         raise e
 
-    config_css = os.path.join(dogf_path, 'templates/post.css')
-    css_path = os.path.join(style_path, 'post.css')
-    try:
-        shutil.copy(config_css, css_path)
-    except IOError as e:
-        logging.error('unable to copy style for the blog, please check your'
-                      ' installation')
-        raise e
-
     # get config file
     config_file_path = os.path.join(blog_path, 'config.yml')
     try:
@@ -196,6 +187,8 @@ def build_site(blog_path):
         obj_post['author'] = config['author']
         obj_post['main_color'] = config['main_color']
         obj_post['header_color'] = config['header_color']
+        obj_post['header_border_color'] = config['header_border_color']
+        obj_post['posts_bk_color'] = config['posts_bk_color']
         try:
             commonl.jinja_this_file(site_post_path, obj_post)
         except IOError as e:
