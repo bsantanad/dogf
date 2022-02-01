@@ -216,6 +216,8 @@ def build_site(blog_path):
         'welcome_message': config['welcome_message'],
         'main_color': config['main_color'],
         'header_color': config['header_color'],
+        'header_border_color' : config['header_border_color'],
+        'posts_bk_color' : config['posts_bk_color'],
         'date': date,
         'articles': [],
     }
